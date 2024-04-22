@@ -21,3 +21,9 @@ This command should output the Docker version information, confirming successful
 
 ### Installing Docker Compose
 Docker Compose is a tool for defining and running multi-container applications. It is the key to unlocking a streamlined and efficient development and deployment experience. Refer to the official Docker documentation for detailed instructions: [https://docs.docker.com/engine/install/](https://docs.docker.com/compose/install/)
+
+### Verifying Docker Compose Installation
+Once you've installed Docker Compose, open a terminal window or command prompt and type the following command:
+```
+ docker compose version
+```
