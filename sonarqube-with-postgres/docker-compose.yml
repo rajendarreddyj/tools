@@ -14,9 +14,11 @@ services:
       SONAR_JDBC_USERNAME: sonar
       SONAR_JDBC_PASSWORD: sonar
     volumes:
-      - sonarqube_data:/opt/sonarqube/data
-      - sonarqube_extensions:/opt/sonarqube/extensions
-      - sonarqube_logs:/opt/sonarqube/logs
+      - /opt/docker-volume/sonarqube_conf:/opt/sonarqube/conf
+      - /opt/docker-volume/sonarqube_data:/opt/sonarqube/data
+      - /opt/docker-volume/sonarqube_extensions:/opt/sonarqube/extensions
+      - /opt/docker-volume/sonarqube_bundled-plugins:/opt/sonarqube/lib/bundled-plugins
+      - /opt/docker-volume/sonarqube_logs:/opt/sonarqube/logs
     ports:
       - "9000:9000"
     networks:
@@ -37,15 +39,16 @@ services:
       POSTGRES_PASSWORD: sonar
       POSTGRES_DB: sonar
     volumes:
-      - postgresql:/var/lib/postgresql
-      - postgresql_data:/var/lib/postgresql/data
+      - /opt/docker-volume/postgresql:/var/lib/postgresql
+      - /opt/docker-volume/postgresql_data:/var/lib/postgresql/data
 networks:
   sonar-net:
     external: false
     
 volumes:
-  sonarqube_data:
-  sonarqube_extensions:
-  sonarqube_logs:
-  postgresql:
-  postgresql_data:
+  /opt/docker-volume/sonarqube_conf:
+  /opt/docker-volume/sonarqube_data:
+  /opt/docker-volume/sonarqube_extensions:
+  /opt/docker-volume/sonarqube_bundled-plugins:
+  /opt/docker-volume/postgresql:
+  /opt/docker-volume/postgresql_data:
