@@ -2,13 +2,15 @@ version: "3"
 services:
   sonarqube:
     image: sonarqube:community
+    command: -Dsonar.ce.javaOpts=-Xmx1024m
+    restart: unless-stopped
     hostname: sonarqube
     container_name: sonarqube
     depends_on:
-      db:
+      sonarqube_db:
         condition: service_healthy
     environment:
-      SONAR_JDBC_URL: jdbc:postgresql://db:5432/sonar
+      SONAR_JDBC_URL: jdbc:postgresql://sonar_db:5432/sonar
       SONAR_JDBC_USERNAME: sonar
       SONAR_JDBC_PASSWORD: sonar
     volumes:
@@ -17,7 +19,9 @@ services:
       - sonarqube_logs:/opt/sonarqube/logs
     ports:
       - "9000:9000"
-  db:
+    networks:
+      - sonar-net  
+  sonarqube_db:
     image: postgres:15
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
@@ -26,14 +30,19 @@ services:
       retries: 5
     hostname: postgresql
     container_name: postgresql
+    networks:
+      - sonar-net 
     environment:
       POSTGRES_USER: sonar
       POSTGRES_PASSWORD: sonar
       POSTGRES_DB: sonar
     volumes:
-      - postgresql:/opt/postgresql
-      - postgresql_data:/opt/postgresql/data
-
+      - postgresql:/var/lib/postgresql
+      - postgresql_data:/var/lib/postgresql/data
+networks:
+  sonar-net:
+    external: false
+    
 volumes:
   sonarqube_data:
   sonarqube_extensions:
